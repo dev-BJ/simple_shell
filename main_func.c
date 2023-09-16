@@ -28,10 +28,6 @@ char *read_input(void)
 /**
  * execute_command - Execute a command using fork and execlp.
  *
- * This function takes a command string and attempts to execute it as a child
- * process using fork and execlp. It waits for the child process to complete
- * before returning in the parent process.
- *
  * @input: The command to execute.
  * @argv0: The name of the calling program for error reporting.
  */
@@ -48,13 +44,25 @@ void execute_command(char *input, char *argv0)
 		}
 		else if (pid == 0)
 		{
-			/* Child process */
-			if (execlp(input, input, NULL) == -1)
+			char *args[MAX_INPUT_LEN], *token;
+			char *env[] = { NULL };
+			int i = 0;
+
+			token = strtok(input, " ");
+			while (token != NULL && i < MAX_INPUT_LEN - 1)
+			{
+				args[i] = token;
+				i++;
+				token = strtok(NULL, " ");
+			}
+			args[i] = NULL;
+
+			if (execve(args[0], args, env) == -1)
 			{
 				perror(argv0);
 				exit(EXIT_FAILURE);
 			}
-			}
+		}
 		else
 		{
 			wait(NULL);
