@@ -1,4 +1,19 @@
 #include "main.h"
+
+/**
+ * print_prompt - Prints the shell prompt.
+ */
+void print_prompt(void)
+{
+	if (isatty(STDIN_FILENO))
+	{
+		char prompt[] = "$ ";
+
+		write(STDOUT_FILENO, prompt, _strlen(prompt));
+		fflush(stdout);
+	}
+}
+
 /**
  * main- entry point for the simple shell program
  * @argc: argument count..
@@ -6,36 +21,23 @@
  *
  * Return: 0
  */
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
-	size_t in_count = 0;
-	ssize_t gl_res;
-	char *line_in;
-	int exe_res;
-	char *arg[2] = {NULL, NULL};
-	char *env[] = {NULL};
+	UNUSED(argc);
 
-	(void)argc;
-	printf("%s\n", argv[0]);
-
-	while(1)
+	while (1)
 	{
-		printf("($) ");
-		gl_res = getline(&line_in, &in_count, stdin);
-		if(gl_res == -1)
-			return -1;
-		/*printf("%s\n", line_in);*/
-		arg[0] = malloc(sizeof(char) * 10);
-		strcpy(arg[0], line_in);
-		exe_res = execve(arg[0], arg, env);
-		if(exe_res == -1)
+		char *input;
+
+		print_prompt();
+		input = read_input();
+
+		if (input == NULL)
 		{
-			printf("%s : %s\n", argv[0], "No such file or directory");
+			break;
 		}
-		
-		/*free(line_in);*/
+		execute_command(input, argv[0]);
+		free(input);
 	}
-	free(arg);
-	free(line_in);
-	return 0;
+	return (EXIT_SUCCESS);
 }
