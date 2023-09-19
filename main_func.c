@@ -9,7 +9,7 @@
  * Return: A pointer to the dynamically allocated string containing the input
  *         line, or NULL if end-of-file is reached.
  */
-char *read_input(void)
+char *read_input()
 {
 	char *input = NULL;
 	size_t input_len = 0;
@@ -21,7 +21,7 @@ char *read_input(void)
 		return (NULL);
 	}
 
-	input[_strcspn(input, "\n")] = '\0';
+	input[strcspn(input, "\n")] = '\0';
 	return (input);
 }
 
@@ -33,7 +33,7 @@ char *read_input(void)
  */
 void execute_command(char *input, char *argv0)
 {
-	if (_strlen(input) > 0)
+	if (strlen(input) > 0)
 	{
 		pid_t pid = fork();
 
@@ -44,20 +44,18 @@ void execute_command(char *input, char *argv0)
 		}
 		else if (pid == 0)
 		{
-			char *args[MAX_INPUT_LEN], *token;
-			char *env[] = { NULL };
-			int i = 0;
+			char *args[MAX_INPUT_LENGTH];
+			int arg_count = 0;
+			char *token = strtok(input, " ");
 
-			token = strtok(input, " ");
-			while (token != NULL && i < MAX_INPUT_LEN - 1)
+			while (token != NULL)
 			{
-				args[i] = token;
-				i++;
+				args[arg_count++] = token;
 				token = strtok(NULL, " ");
 			}
-			args[i] = NULL;
+			args[arg_count] = NULL;
 
-			if (execve(args[0], args, env) == -1)
+			if (execve(args[0], args, environ) == -1)
 			{
 				perror(argv0);
 				exit(EXIT_FAILURE);

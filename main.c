@@ -3,13 +3,13 @@
 /**
  * print_prompt - Prints the shell prompt.
  */
-void print_prompt(void)
+void print_prompt()
 {
 	if (isatty(STDIN_FILENO))
 	{
 		char prompt[] = "$ ";
 
-		write(STDOUT_FILENO, prompt, _strlen(prompt));
+		write(STDOUT_FILENO, prompt, strlen(prompt));
 		fflush(stdout);
 	}
 }
@@ -23,12 +23,12 @@ void print_prompt(void)
  */
 int main(int argc, char *argv[])
 {
+	char *input = NULL;
+
 	UNUSED(argc);
 
 	while (1)
 	{
-		char *input;
-
 		print_prompt();
 		input = read_input();
 
