@@ -9,7 +9,7 @@
  * Return: A pointer to the dynamically allocated string containing the input
  *         line, or NULL if end-of-file is reached.
  */
-char *read_input()
+char *read_input(void)
 {
 	char *input = NULL;
 	size_t input_len = 0;

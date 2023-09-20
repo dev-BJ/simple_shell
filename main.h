@@ -25,9 +25,9 @@ size_t _strcspn(const char *s1, const char *s2);
 
 /* shell functions */
 int main(int argc, char *argv[]);
-void print_prompt();
+void print_prompt(void);
 void execute_command(char *input, char *argv0);
-char *read_input();
+char *read_input(void);
 char **split_path(void);
 void free_path(char **path);
 
