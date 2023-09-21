@@ -33,37 +33,40 @@ char *read_input(void)
  */
 void execute_command(char *input, char *argv0)
 {
-	if (strlen(input) > 0)
-	{
-		pid_t pid = fork();
+	char *trimmed_input = input + strspn(input, " ");
+	size_t input_length = strlen(trimmed_input);
+	pid_t pid = fork();
 
-		if (pid == -1)
+	if (input_length == 0)
+	{
+		return;
+	}
+	if (pid == -1)
+	{
+		perror(argv0);
+		exit(EXIT_FAILURE);
+	}
+	else if (pid == 0)
+	{
+		char *args[MAX_INPUT_LENGTH];
+		int arg_count = 0;
+		char *token = strtok(trimmed_input, " ");
+
+		while (token != NULL)
+		{
+			args[arg_count++] = token;
+			token = strtok(NULL, " ");
+		}
+		args[arg_count] = NULL;
+
+		if (execve(args[0], args, environ) == -1)
 		{
 			perror(argv0);
 			exit(EXIT_FAILURE);
 		}
-		else if (pid == 0)
-		{
-			char *args[MAX_INPUT_LENGTH];
-			int arg_count = 0;
-			char *token = strtok(input, " ");
-
-			while (token != NULL)
-			{
-				args[arg_count++] = token;
-				token = strtok(NULL, " ");
-			}
-			args[arg_count] = NULL;
-
-			if (execve(args[0], args, environ) == -1)
-			{
-				perror(argv0);
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			wait(NULL);
-		}
+	}
+	else
+	{
+		wait(NULL);
 	}
 }
