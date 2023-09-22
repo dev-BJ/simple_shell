@@ -70,3 +70,39 @@ void execute_command(char *input, char *argv0)
 		wait(NULL);
 	}
 }
+
+/**
+ * handle_exit - Handles the "exit" command.
+ *
+ * @input: The input string to check.
+ */
+void handle_exit(char *input)
+{
+	if (strcmp(input, "exit") == 0)
+	{
+		exit(EXIT_SUCCESS);
+	}
+}
+
+/**
+ * print_env - Handles the "env" by printing the
+ * the current environment
+ *
+ * @input: The input string to check.
+ */
+void print_env(char *input)
+{
+	if (strcmp(input, "env") == 0)
+	{
+		char **env = environ;
+
+		while (*env)
+		{
+			size_t len = strlen(*env);
+
+			write(STDOUT_FILENO, *env, len);
+			write(STDOUT_FILENO, "\n", 1);
+			env++;
+		}
+	}
+}

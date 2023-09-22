@@ -28,6 +28,8 @@ int main(int argc, char *argv[]);
 void print_prompt(void);
 void execute_command(char *input, char *argv0);
 char *read_input(void);
+void handle_exit(char *input);
+void print_env(char *input);
 char **split_path(void);
 void free_path(char **path);
 

@@ -36,6 +36,9 @@ int main(int argc, char *argv[])
 		{
 			break;
 		}
+		handle_exit(input);
+		print_env(input);
+
 		execute_command(input, argv[0]);
 		free(input);
 	}
