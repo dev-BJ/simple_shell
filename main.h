@@ -32,5 +32,6 @@ void handle_exit(char *input);
 void print_env(char *input);
 char **split_path(void);
 void free_path(char **path);
+char *get_path(char *in);
 
 #endif
