@@ -60,8 +60,12 @@ void execute_command(char *input, char *argv0)
 		}
 		args[arg_count] = NULL;
 		cmd = get_path(args[0]);
-		printf("cmd %s", cmd);
 
+		if(NULL == cmd)
+		{
+			perror(argv0);
+			return;
+		}
 		if (execve(cmd, args, environ) == -1)
 		{
 			perror(argv0);
